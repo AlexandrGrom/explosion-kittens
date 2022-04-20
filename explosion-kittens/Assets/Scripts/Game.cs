@@ -8,7 +8,6 @@ public class Game : MonoBehaviourPunCallbacks
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
-        
     }
 
     public void Leave()

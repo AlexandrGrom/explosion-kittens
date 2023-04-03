@@ -156,6 +156,7 @@ namespace Photon.Pun.Demo.Asteroids
         [PunRPC]
         public void Fire(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
         {
+            Debug.Log("Fire");
             float lag = (float) (PhotonNetwork.Time - info.SentServerTime);
             GameObject bullet;
 

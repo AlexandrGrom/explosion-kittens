@@ -21,7 +21,7 @@ namespace Photon.Pun.Demo.Asteroids
 {
     public class AsteroidsGameManager : MonoBehaviourPunCallbacks
     {
-        public static AsteroidsGameManager Instance = null;
+        //public static AsteroidsGameManager Instance = null;
 
         public Text InfoText;
 
@@ -29,10 +29,10 @@ namespace Photon.Pun.Demo.Asteroids
 
         #region UNITY
 
-        public void Awake()
-        {
-            Instance = this;
-        }
+        //public void Awake()
+        //{
+        //    Instance = this;
+        //}
 
         public override void OnEnable()
         {

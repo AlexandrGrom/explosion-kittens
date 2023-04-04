@@ -6,17 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private TextMeshProUGUI info;
-
-    private void Awake()
-    {
-        //initGame
-        if (PhotonNetwork.IsMasterClient)
-        {
-            var v = PhotonNetwork.Instantiate("deck", Vector3.zero, Quaternion.identity);
-            v.GetComponent<Deck>().Initialize();
-        }
-    }
+    [SerializeField] private Deck _deckPrefab;
+    
+    public TextMeshProUGUI _mime;
+    public TextMeshProUGUI _other;    
     
     public override void OnLeftRoom()
     {
@@ -30,7 +23,13 @@ public class Game : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log(newPlayer.NickName + "connected");
+        //Debug.Log(newPlayer.NickName + "connected");
+        
+        if (PhotonNetwork.IsMasterClient)
+        {
+            var deck = PhotonNetwork.Instantiate(_deckPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Deck>();
+            deck.Initialize();
+        }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)

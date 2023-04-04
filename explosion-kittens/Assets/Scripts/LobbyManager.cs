@@ -6,8 +6,8 @@ using Random = UnityEngine.Random;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
-
     [SerializeField] private TextMeshProUGUI logText;
+    
     private void Awake()
     {
         PhotonNetwork.NickName = "Player" + Random.Range(0, 1000);
@@ -16,6 +16,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         Log(PhotonNetwork.NickName);
         
         PhotonNetwork.ConnectUsingSettings();
+        PhotonNetwork.ConnectToRegion("eu");
     }
 
     public override void OnConnectedToMaster()

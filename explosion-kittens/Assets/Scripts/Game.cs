@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -6,7 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private Deck _deckPrefab;
+    [SerializeField] private Deck _deck;
+    [SerializeField] private GameObject playerUIPrefab;
+    private List<Player> players;
     
     public TextMeshProUGUI _mime;
     public TextMeshProUGUI _other;    
@@ -21,17 +24,35 @@ public class Game : MonoBehaviourPunCallbacks
         PhotonNetwork.LeaveRoom();
     }
 
+    public override void OnJoinedRoom()
+    {
+
+    }
+
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        //Debug.Log(newPlayer.NickName + "connected");
+        // crate player ui and data
+        
+        
+        var player = PhotonNetwork.Instantiate(playerUIPrefab.name, transform.position, Quaternion.identity);
+        Debug.Log(player.name, player);
+        player.transform.SetParent(transform);
+        var playerUI = player.GetComponent<PlayerUI>();
+        playerUI.SetName(photonView.Owner.NickName);
+        
+
+        
+        if (PhotonNetwork.CurrentRoom.MaxPlayers < PhotonNetwork.PlayerList.Length)
+        {
+            return;
+        }
         
         if (PhotonNetwork.IsMasterClient)
         {
-            var deck = PhotonNetwork.Instantiate(_deckPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Deck>();
-            deck.Initialize();
+            _deck.Initialize();
         }
     }
-
+    
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log(otherPlayer.NickName + "disconnect");

@@ -99,7 +99,7 @@ namespace Photon.Pun.Demo.Asteroids
 
             while (timer > 0.0f)
             {
-                InfoText.text = string.Format("Player {0} won with {1} points.\n\n\nReturning to login screen in {2} seconds.", winner, score, timer.ToString("n2"));
+                InfoText.text = $"Player {winner} won with {score} points.\n\n\nReturning to login screen in {timer:n2} seconds.";
 
                 yield return new WaitForEndOfFrame();
 

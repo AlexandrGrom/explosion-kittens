@@ -84,7 +84,7 @@ namespace Photon.Pun.UtilityScripts
             if (!this.isTimerRunning) return;
 
             float countdown = TimeRemaining();
-            this.Text.text = string.Format("Game starts in {0} seconds", countdown.ToString("n0"));
+            this.Text.text = $"Game starts in {countdown:n0} seconds";
 
             if (countdown > 0.0f) return;
 
@@ -106,7 +106,7 @@ namespace Photon.Pun.UtilityScripts
             Debug.Log("Emptying info text.", this.Text);
             this.Text.text = string.Empty;
 
-            if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired();
+            if (OnCountdownTimerHasExpired != null) OnCountdownTimerHasExpired.Invoke();
         }
 
 

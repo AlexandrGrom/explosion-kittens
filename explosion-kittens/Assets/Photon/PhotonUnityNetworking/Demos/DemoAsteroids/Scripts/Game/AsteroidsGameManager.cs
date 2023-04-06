@@ -201,16 +201,12 @@ namespace Photon.Pun.Demo.Asteroids
 
         private bool CheckAllPlayerLoadedLevel()
         {
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (var p in PhotonNetwork.PlayerList)
             {
-                object playerLoadedLevel;
-
-                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LOADED_LEVEL, out playerLoadedLevel))
+                if (!p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LOADED_LEVEL, out var playerLoadedLevel)) return false;
+                if ((bool) playerLoadedLevel)
                 {
-                    if ((bool) playerLoadedLevel)
-                    {
-                        continue;
-                    }
+                    continue;
                 }
 
                 return false;
@@ -225,8 +221,7 @@ namespace Photon.Pun.Demo.Asteroids
 
             foreach (Player p in PhotonNetwork.PlayerList)
             {
-                object lives;
-                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out lives))
+                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out var lives))
                 {
                     if ((int) lives > 0)
                     {

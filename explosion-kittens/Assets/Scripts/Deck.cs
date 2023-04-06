@@ -41,16 +41,21 @@ public class Deck : MonoBehaviour
     }
     
     
+    
     private void ClickOnDeck()
     {
-        Debug.Log(turnIndex % PhotonNetwork.PlayerList.Length);
-        Debug.Log(PhotonNetwork.LocalPlayer.ActorNumber);
-        
-        //PhotonNetwork.LocalPlayer.GetPlayerNumber();
         if (turnIndex % PhotonNetwork.PlayerList.Length  == PhotonNetwork.LocalPlayer.ActorNumber-1)
         {
             var randomValue = UnityEngine.Random.Range(0, deckDataList.Count);
             photonView.RPC(nameof(Draw), RpcTarget.All, randomValue);
+        }
+    }
+
+    public void Players(List<PlayerUI> players)
+    {
+        for (var i = 0; i < players.Count; i++)
+        {
+            var p = players[i];
         }
     }
     
@@ -59,22 +64,23 @@ public class Deck : MonoBehaviour
     {
         int card = deckDataList[value];
 
-        if (card == 0)
+        if (card == 1)
         {
             Debug.Log("bum!");// end game
         }
-        
-        // draw logic (send card to players[PhotonNetwork.LocalPlayer.ActorNumber])
 
-        //if ()
-        //{
-        //    _mine.text += card + " ";
-        //}
-        //else
-        //{
-        //    _other.text += "? ";
-        //}
+        int currentPlayerIndex = turnIndex % PhotonNetwork.PlayerList.Length;
         
+        PlayerUI v = FindObjectOfType<Game>().Players[currentPlayerIndex];
+
+        if (currentPlayerIndex == PhotonNetwork.LocalPlayer.ActorNumber-1)
+        {
+            v.SetName(card.ToString());
+        }
+        else
+        {
+            v.SetName("?");
+        }
         
         turnIndex++;
         deckDataList.Remove(card);

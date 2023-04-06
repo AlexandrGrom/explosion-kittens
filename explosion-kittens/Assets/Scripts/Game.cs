@@ -9,10 +9,11 @@ public class Game : MonoBehaviourPunCallbacks
     [SerializeField] private Deck _deck;
     [SerializeField] private PlayerUI playerUIPrefab;
 
-    [SerializeField] private Transform[] positions;
-    
-    private List<Player> players;
-    
+    [SerializeField] private RectTransform[] positions;
+
+    private List<PlayerUI> players = new List<PlayerUI>();
+    public List<PlayerUI> Players => players;
+
 
     public override void OnLeftRoom()
     {
@@ -38,23 +39,33 @@ public class Game : MonoBehaviourPunCallbacks
             targetIdx = PhotonNetwork.PlayerList.Length + targetIdx;
         }
         
-        var v = positions[targetIdx].position;
+        var targetRT = positions[targetIdx];
             
-        var player1 = PhotonNetwork.PlayerList[otherPlayerIndex];
+        Player PhotonPlayer = PhotonNetwork.PlayerList[otherPlayerIndex];
             
             
         var player = Instantiate(playerUIPrefab, transform);
-        player.SetName(player1.NickName);
+        player.SetName(PhotonPlayer.NickName);
         player.transform.SetParent(transform);
         player.transform.localScale = Vector3.one;
-
-        player.GetComponent<RectTransform>().anchoredPosition = v;
+        
+        
+        var playerRT = player.GetComponent<RectTransform>();
+        
+        playerRT.anchorMin = targetRT.anchorMin;
+        playerRT.anchorMax =  targetRT.anchorMax;
+        playerRT.pivot =  targetRT.pivot;
+        playerRT.anchoredPosition = targetRT.anchoredPosition;
+        
+        
+        players.Insert(PhotonPlayer.ActorNumber - 1, player);
     }
     
     
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        CratePlayer(newPlayer.ActorNumber - 1, PhotonNetwork.LocalPlayer.ActorNumber - 1);
+        var myIndex = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        CratePlayer(newPlayer.ActorNumber - 1, myIndex);
             
         if (PhotonNetwork.CurrentRoom.MaxPlayers < PhotonNetwork.PlayerList.Length)
         {

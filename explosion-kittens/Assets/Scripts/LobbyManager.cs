@@ -10,7 +10,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     
     private void Awake()
     {
-        PhotonNetwork.NickName = "Player" + Random.Range(0, 1000);
+        
+        PhotonNetwork.NickName = "PC";
+#if UNITY_EDITOR
+        PhotonNetwork.NickName = "EDITOR";
+#endif
+        
+        
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "1";
         Log(PhotonNetwork.NickName);
@@ -21,7 +27,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public override void OnConnectedToMaster()
     {
-        Log("connected to master");
+        Log("\nconnected to master");
     }
 
     public void CreateRoom()

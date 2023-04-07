@@ -1,6 +1,7 @@
-TODO
-Create Player UI V
-update Player UI V
-Win / Lose States 
-Upgrade Lobby
-Cards architecture
+TODO:
+Create Player UI [V]
+update Player UI [V]
+Win / Lose States [V] //refactor it 
+Upgrade Lobby []
+Add Bot []
+Cards architecture []

@@ -10,6 +10,9 @@ public class Game : MonoBehaviourPunCallbacks
     [SerializeField] private PlayerUI playerUIPrefab;
 
     [SerializeField] private RectTransform[] positions;
+    
+    [SerializeField] private GameObject lose;
+    [SerializeField] private GameObject win;
 
     private List<PlayerUI> players = new List<PlayerUI>();
     public List<PlayerUI> Players => players;
@@ -22,12 +25,15 @@ public class Game : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        _deck.SetUpGame(this);
+        
         var myIdx = PhotonNetwork.LocalPlayer.ActorNumber-1;
         
         for (var i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             CratePlayer(i, myIdx);
         }
+        
     }
 
     private void CratePlayer(int otherPlayerIndex, int thisPlayerIndex)
@@ -42,13 +48,11 @@ public class Game : MonoBehaviourPunCallbacks
         var targetRT = positions[targetIdx];
             
         Player PhotonPlayer = PhotonNetwork.PlayerList[otherPlayerIndex];
-            
-            
+        
         var player = Instantiate(playerUIPrefab, transform);
         player.SetName(PhotonPlayer.NickName);
         player.transform.SetParent(transform);
         player.transform.localScale = Vector3.one;
-        
         
         var playerRT = player.GetComponent<RectTransform>();
         
@@ -56,7 +60,6 @@ public class Game : MonoBehaviourPunCallbacks
         playerRT.anchorMax =  targetRT.anchorMax;
         playerRT.pivot =  targetRT.pivot;
         playerRT.anchoredPosition = targetRT.anchoredPosition;
-        
         
         players.Insert(PhotonPlayer.ActorNumber - 1, player);
     }
@@ -67,10 +70,7 @@ public class Game : MonoBehaviourPunCallbacks
         var myIndex = PhotonNetwork.LocalPlayer.ActorNumber - 1;
         CratePlayer(newPlayer.ActorNumber - 1, myIndex);
             
-        if (PhotonNetwork.CurrentRoom.MaxPlayers < PhotonNetwork.PlayerList.Length)
-        {
-            return;
-        }
+        if (PhotonNetwork.CurrentRoom.MaxPlayers < PhotonNetwork.PlayerList.Length) return;
         
         if (PhotonNetwork.IsMasterClient)
         {
@@ -81,5 +81,17 @@ public class Game : MonoBehaviourPunCallbacks
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
         Debug.Log(otherPlayer.NickName + "disconnect");
+    }
+
+    public void HandleEndGame(bool winGame)
+    {
+        if (winGame)
+        {
+            win.SetActive(true);
+        }
+        else
+        {
+            lose.SetActive(true);
+        }
     }
 }

@@ -3,7 +3,6 @@ using System.Linq;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = System.Random;
 
@@ -13,14 +12,12 @@ public class Deck : MonoBehaviour
     [SerializeField] private PhotonView photonView;
     [SerializeField] private TextMeshProUGUI deckCount;
     [SerializeField] private Button deckInteract;
-
+    
     private int turnIndex = 0;
     
-    private TextMeshProUGUI _mine;
-    private TextMeshProUGUI _other;
-
     private List<int> deckDataList;
-
+    private Game _game;
+    
 
     public void Initialize()
     {
@@ -29,6 +26,11 @@ public class Deck : MonoBehaviour
         deckData = deckData.OrderBy(x => random.Next()).ToArray();
 
         photonView.RPC(nameof(SetUpDeck), RpcTarget.All, deckData);
+    }
+
+    public void SetUpGame(Game game)
+    {
+        _game = game;
     }
 
     [PunRPC]
@@ -64,25 +66,36 @@ public class Deck : MonoBehaviour
     {
         int card = deckDataList[value];
 
-        if (card == 1)
-        {
-            Debug.Log("bum!");// end game
-        }
-
         int currentPlayerIndex = turnIndex % PhotonNetwork.PlayerList.Length;
-        
-        PlayerUI v = FindObjectOfType<Game>().Players[currentPlayerIndex];
+        PlayerUI v = _game.Players[currentPlayerIndex];
 
+        // todo: hand should deteck whitch card was taken and send event if lose
         if (currentPlayerIndex == PhotonNetwork.LocalPlayer.ActorNumber-1)
         {
-            v.SetName(card.ToString());
+            if (card == 1)
+            {
+                _game.HandleEndGame(false);
+            }
+            else
+            {
+                v.SetName(card.ToString());
+            }
         }
         else
         {
-            v.SetName("?");
+            if (card == 1)
+            {
+                _game.HandleEndGame(true);
+            }
+            else
+            {
+                v.SetName("?");
+            }
         }
+
+        int diedPlayers = 0;
+        turnIndex += 1 + diedPlayers;
         
-        turnIndex++;
         deckDataList.Remove(card);
         
         deckCount.text = deckDataList.Count.ToString();

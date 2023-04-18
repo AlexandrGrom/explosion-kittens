@@ -1,18 +1,17 @@
+using Lobby;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
-using UI;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI logText;
-    [SerializeField] private NameSetUp _nameSetUp;
+    [SerializeField] private InputFieldSetUp _nameSetUp;
     
     private void Start()
     {
-        PhotonNetwork.NickName = _nameSetUp.PlayerName;
+        PhotonNetwork.NickName = _nameSetUp.Name;
         
         
         PhotonNetwork.AutomaticallySyncScene = true;

@@ -1,18 +1,31 @@
+using System;
 using Lobby;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TextMeshProUGUI logText;
     [SerializeField] private InputFieldSetUp _nameSetUp;
-    
+
+    [SerializeField] private Button joinRoom;
+    [SerializeField] private Button showRoomsList;
+    [SerializeField] private Button playWithBot;
+
+    private void Awake()
+    {
+        joinRoom.onClick.AddListener(JoinRoom);
+        //showRoomsList.onClick.AddListener(JoinRoom);
+        //playWithBot.onClick.AddListener(JoinRoom);
+    }
+
+
     private void Start()
     {
         PhotonNetwork.NickName = _nameSetUp.Name;
-        
         
         PhotonNetwork.AutomaticallySyncScene = true;
         PhotonNetwork.GameVersion = "1";
@@ -27,10 +40,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         Log("\nconnected to master");
     }
 
-    public void CreateRoom()
-    {
-        PhotonNetwork.CreateRoom(null, new RoomOptions {MaxPlayers = 2});
-    }
+
 
     public void JoinRoom()
     {

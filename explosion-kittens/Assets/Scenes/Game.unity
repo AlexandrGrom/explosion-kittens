@@ -720,6 +720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deck: {fileID: 911020115}
+  _endTurn: {fileID: 978845547}
   playerUIPrefab: {fileID: 4821653772875735407, guid: a8fca6dd44cea9848be82a04256f045b, type: 3}
   positions:
   - {fileID: 969247237}
@@ -887,8 +888,6 @@ MonoBehaviour:
   photonView: {fileID: 911020114}
   deckCount: {fileID: 1239365735}
   deckInteract: {fileID: 911020111}
-  endTurn: {fileID: 978845542}
-  endTurnText: {fileID: 1325934171}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,8 +1020,8 @@ GameObject:
   - component: {fileID: 978845544}
   - component: {fileID: 978845543}
   - component: {fileID: 978845542}
-  - component: {fileID: 978845545}
   - component: {fileID: 978845546}
+  - component: {fileID: 978845547}
   m_Layer: 5
   m_Name: Turn
   m_TagString: Untagged
@@ -1133,22 +1132,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 978845540}
   m_CullTransparentMesh: 1
---- !u!114 &978845545
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 978845540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 0
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 1
-  m_UseLocal: 1
 --- !u!114 &978845546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1167,11 +1150,23 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   observableSearch: 2
-  ObservedComponents:
-  - {fileID: 978845545}
+  ObservedComponents: []
   sceneViewId: 2
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &978845547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978845540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d35b1d8c70d23443b71c3447a72e735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textInfo: {fileID: 1325934171}
 --- !u!1 &1223352823
 GameObject:
   m_ObjectHideFlags: 0

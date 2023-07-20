@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class Game : MonoBehaviourPunCallbacks
 {
     [SerializeField] private Deck _deck;
+    [SerializeField] private EndTurn _endTurn;
     [SerializeField] private PlayerUI playerUIPrefab;
 
     [SerializeField] private RectTransform[] positions;
@@ -17,10 +18,34 @@ public class Game : MonoBehaviourPunCallbacks
     private List<PlayerUI> players = new List<PlayerUI>();
     public List<PlayerUI> Players => players;
 
+    public int TurnIndex { get; private set; }
+
+    public PlayerUI CurrentPlayer { get; private set; }
+
+    public bool readyToEndTurn { get; private set; }
+
+    public void ReadyToEndTurn()
+    {
+        _endTurn.Activate();
+        readyToEndTurn = true;
+    }
 
     public override void OnLeftRoom()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void IncrementTurnIndex()
+    {
+        readyToEndTurn = false;
+
+        int diedPlayers = 0;
+        TurnIndex += 1 + diedPlayers;
+        
+        int currentPlayerIndex = TurnIndex % PhotonNetwork.PlayerList.Length;
+        
+        CurrentPlayer = players[currentPlayerIndex];
+        CurrentPlayer.IsMyTurn = true;
     }
 
     private void Awake()
@@ -34,6 +59,7 @@ public class Game : MonoBehaviourPunCallbacks
             CratePlayer(i, myIdx);
         }
         
+        _endTurn.SetUpGame(this);
     }
 
     private void CratePlayer(int otherPlayerIndex, int thisPlayerIndex)
@@ -50,7 +76,19 @@ public class Game : MonoBehaviourPunCallbacks
         Player PhotonPlayer = PhotonNetwork.PlayerList[otherPlayerIndex];
         
         var player = Instantiate(playerUIPrefab, transform);
+        player.SetUpGame(this);
         player.SetName(PhotonPlayer.NickName);
+        
+        
+        int currentPlayerIndex = TurnIndex % PhotonNetwork.PlayerList.Length;
+        player.IsMyTurn = currentPlayerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1;
+        
+        if (player.IsMyTurn)
+        {
+            CurrentPlayer = player;
+        }
+        
+        
         player.transform.SetParent(transform);
         player.transform.localScale = Vector3.one;
         
@@ -75,6 +113,7 @@ public class Game : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             _deck.Initialize();
+            _endTurn.Initialize();
         }
     }
     

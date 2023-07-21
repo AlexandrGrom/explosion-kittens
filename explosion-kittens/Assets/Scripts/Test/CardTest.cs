@@ -6,7 +6,8 @@ using UnityEngine;
 public class CardTest : MonoBehaviour
 {
     [SerializeField] private Transform _target;
-    
+    [SerializeField] private int speed = 10;
+    public Vector3 offset = Vector3.zero;
     
     public void SetTarget(Transform target)
     {
@@ -17,7 +18,7 @@ public class CardTest : MonoBehaviour
     {
         if (_target != null)
         {
-            transform.position = Vector3.Lerp(transform.position, _target.position, Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, _target.position + offset, Time.deltaTime * speed);
         }
     }
 }

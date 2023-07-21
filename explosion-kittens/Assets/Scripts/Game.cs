@@ -10,8 +10,9 @@ public class Game : MonoBehaviourPunCallbacks
     [SerializeField] private EndTurn _endTurn;
     [SerializeField] private PlayerUI playerUIPrefab;
 
-    [SerializeField] private RectTransform[] positions;
-    
+    public RectTransform[] positions;
+    public RectTransform localPosition { get; private set; }
+
     [SerializeField] private GameObject lose;
     [SerializeField] private GameObject win;
 
@@ -72,6 +73,7 @@ public class Game : MonoBehaviourPunCallbacks
         }
         
         var targetRT = positions[targetIdx];
+        localPosition = targetRT;
             
         Player PhotonPlayer = PhotonNetwork.PlayerList[otherPlayerIndex];
         

@@ -14,6 +14,7 @@ public class Deck : MonoBehaviour
     [SerializeField] private PhotonView photonView;
     [SerializeField] private TextMeshProUGUI deckCount;
     [SerializeField] private Button deckInteract;
+    [SerializeField] private GameObject catCard;
     
     private List<int> deckDataList;
     private Game _game;
@@ -22,8 +23,9 @@ public class Deck : MonoBehaviour
 
     public void Initialize()
     {
-        int[] deckData = new int[30];
-        for (int i = 0; i < 30; i++)
+        int count = 20;
+        int[] deckData = new int[count];
+        for (int i = 0; i < count; i++)
         {
             deckData[i] = i + 1;
         }
@@ -69,6 +71,16 @@ public class Deck : MonoBehaviour
         PlayerUI player = _game.Players[currentPlayerIndex];
         
         player.TakeCard(card,currentPlayerIndex == PhotonNetwork.LocalPlayer.ActorNumber - 1);
+
+        var v = Instantiate(catCard, transform.position, Quaternion.identity, transform.parent);
+        v.transform.SetSiblingIndex(0);
+
+        var v1 = (_game.TurnIndex + PhotonNetwork.LocalPlayer.ActorNumber - 1) % PhotonNetwork.PlayerList.Length;
+        //var v1 = (currentPlayerIndex) % PhotonNetwork.PlayerList.Length;
+        
+        v.transform.DOMove(_game.positions[v1].transform.position, 1);
+        
+        
         
         deckDataList.Remove(card);
         

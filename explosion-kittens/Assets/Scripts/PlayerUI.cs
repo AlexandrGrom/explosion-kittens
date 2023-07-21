@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Photon.Pun;
 using TMPro;
 using UnityEngine;
@@ -20,32 +21,29 @@ public class PlayerUI : MonoBehaviourPunCallbacks
         _name.text += name;
     }
 
-    public void TakeCard(int cardData, bool isMine)
+    public void TakeCard(CardInfo card, bool isMine)
     {
+        card.SetInfo(isMine);
+
         if (isMine)
         {
             _game.ReadyToEndTurn();
             IsMyTurn = false;
             
-            if (cardData == 1)
+            if (card.Info == 1)
             {
                 _game.HandleEndGame(false);
-            }
-            else
-            {
-                SetName(cardData.ToString());
             }
         }
         else
         {
-            if (cardData == 1)
+            if (card.Info == 1)
             {
                 _game.HandleEndGame(true);
             }
-            else
-            {
-                SetName("?");
-            }
         }
+        
+        var targetIdx = (_game.TurnIndex + PhotonNetwork.LocalPlayer.ActorNumber - 1) % PhotonNetwork.PlayerList.Length;
+        card.transform.DOMove(_game.positions[targetIdx].transform.position, 1);
     }
 }

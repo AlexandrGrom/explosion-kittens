@@ -888,7 +888,7 @@ MonoBehaviour:
   photonView: {fileID: 911020114}
   deckCount: {fileID: 1239365735}
   deckInteract: {fileID: 911020111}
-  catCard: {fileID: 1559617693100933590, guid: 06abb7096f97c524fa744192a17448db, type: 3}
+  catCard: {fileID: 8251009790843981872, guid: 06abb7096f97c524fa744192a17448db, type: 3}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,7 +1365,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 20
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0ae0f6e309c40a3428e0b0805bb26a93, type: 2}
   m_sharedMaterial: {fileID: 4302074355913652956, guid: 0ae0f6e309c40a3428e0b0805bb26a93, type: 2}

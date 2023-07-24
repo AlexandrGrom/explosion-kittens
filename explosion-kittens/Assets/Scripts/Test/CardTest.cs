@@ -17,10 +17,6 @@ public class CardTest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     private int targetIndex;
     private Transform _world;
 
-    
-
-    
-
     public void SetTarget(Transform target, Canvas canvas, Transform world)
     {
         targetIndex = transform.GetSiblingIndex();
@@ -38,13 +34,13 @@ public class CardTest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     private void Update()
     {
-        //if (_target == null) return;
-
         if (drag)
         {
-            transform.position = Vector3.Lerp(transform.position, localTarget.position, Time.deltaTime * speed * 2) ;
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * speed);
-
+            if (tolerantDrag)
+            {
+                transform.position = Vector3.Lerp(transform.position, localTarget.position, Time.deltaTime * speed * 2) ;
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * speed);
+            }
         }
         else
         {
@@ -60,11 +56,20 @@ public class CardTest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         transform.SetSiblingIndex(transform.parent.childCount);
     }
 
+    private bool tolerantDrag;
     public void OnDrag(PointerEventData eventData)
     {
         localTarget.anchoredPosition += eventData.delta / _canvas.scaleFactor;
-        
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * speed);
+
+        if (Vector3.Distance(transform.position,localTarget.position) < (1 * eventData.delta.magnitude))
+        {
+            tolerantDrag = true;
+        }
+        else
+        {
+            transform.position = Vector3.Lerp(transform.position, localTarget.position, Time.deltaTime * speed * 2);
+            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * speed);
+        }
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -75,16 +80,14 @@ public class CardTest : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        tolerantDrag = false;
         drag = true;
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _canvas.transform as RectTransform,
             Input.mousePosition, _canvas.worldCamera,
             out var movePos);
-
         
         localTarget.position = _canvas.transform.TransformPoint(movePos);
-
-        //localTarget.anchoredPosition = eventData.position;
     }
 }

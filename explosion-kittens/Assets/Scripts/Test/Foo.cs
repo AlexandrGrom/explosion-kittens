@@ -30,12 +30,15 @@ namespace Test
             {
                 if (tests.Count >= positions.Length) return;
                 
-                var v = Instantiate(testPrefab, parent);
-                v.transform.position = start.position;
-                tests.Add(v);
-                var v1 = positions[tests.Count-1];
-                v1.gameObject.SetActive(true);
-                v.SetTarget(v1, canvas, world);
+                var cardTest = Instantiate(testPrefab, parent);
+                
+                cardTest.transform.position = start.position;
+                tests.Add(cardTest);
+                var target = positions[tests.Count-1];
+                
+                target.gameObject.SetActive(true);
+                
+                cardTest.SetTarget(target, canvas, world);
 
             
                 float f = tests.Count - 1;
@@ -60,7 +63,7 @@ namespace Test
 
                     float position = (10 - targetRot) / 20;
                 
-                    tests[i].transform.localEulerAngles = new Vector3(0,0,targetRot);
+                    //tests[i].transform.localEulerAngles = new Vector3(0,0,targetRot);
                     tests[i].rotation = new Vector3(0,0,targetRot);
                     
                     
